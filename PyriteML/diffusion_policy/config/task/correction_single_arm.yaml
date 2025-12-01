@@ -1,0 +1,149 @@
+# Mod2: 19D action, no dense
+name: stow_residual
+
+# rgb vs. low_dim: raw data are either rgb images or low_dim vectors. frames are aligned within each type.
+# obs vs. action: obs data are used as policy input; action are used as labels for policy output.
+# dense vs. sparse: used for dense prediction vs. sparse prediction
+
+# down_sample_steps: how many steps to skip in the raw data for the given usage
+# horizon: how many steps to look ahead(action) or back(obs) after downsample for the given usage
+sparse_obs_rgb_down_sample_steps: 1
+sparse_obs_rgb_horizon: 1
+
+sparse_obs_low_dim_down_sample_steps: 5
+sparse_obs_low_dim_horizon: 3
+
+sparse_obs_base_down_sample_steps: 50
+sparse_obs_base_horizon: 6
+
+sparse_obs_wrench_down_sample_steps: 4
+sparse_obs_wrench_horizon: 32
+
+sparse_action_down_sample_steps: 10
+sparse_action_horizon: 5
+
+
+shape_meta: &shape_meta
+  # acceptable types: rgb, low_dim
+  # fields under raw and obs must be consistent with FlipUpDataset.raw_to_obs_action()
+  id_list: [0]
+  raw: # describes what exists in data
+    rgb_0:
+      shape: [3, 224, 224]
+      type: rgb
+    ts_pose_fb_0:
+      shape: [7]
+      type: low_dim
+    ts_pose_command_0:
+      shape: [7]
+      type: low_dim
+    policy_pose_command_0:
+      shape: [7]
+      type: low_dim
+    ts_pose_virtual_target_0:
+      shape: [7]
+      type: low_dim
+    stiffness_0:
+      shape: [1]
+      type: low_dim
+    wrench_0:
+      shape: [6]
+      type: low_dim
+    rgb_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    robot_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    wrench_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    policy_time_stamps_0:
+      shape: [1]
+      type: timestamp
+
+  obs: # describes observations loaded to memory 
+    rgb_0:
+      shape: [3, 224, 224]
+      type: rgb
+    robot0_eef_pos:
+      shape: [3]
+      type: low_dim
+    robot0_eef_rot_axis_angle:
+      shape: [6]
+      type: low_dim
+      rotation_rep: rotation_6d
+    policy_robot0_eef_pos:
+      shape: [3]
+      type: low_dim
+    policy_robot0_eef_rot_axis_angle:
+      shape: [6]
+      type: low_dim
+      rotation_rep: rotation_6d
+    robot0_eef_wrench:
+      shape: [6]
+      type: low_dim
+    rgb_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    robot_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    policy_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    wrench_time_stamps_0:
+      shape: [1]
+      type: timestamp
+  action: # describes actions loaded to memory, computed from robot command
+    shape: [19] # 9 for residual reference pose, 9 for virtual target, 1 for stiffness
+    rotation_rep: rotation_6d
+  sample: # describes samples used in a batch
+          # keys here must exist in obs/action above.
+          # shape, type and rotation_rep are inherited from obs/action above.
+    obs:
+      sparse:
+        rgb_0:
+          horizon: ${task.sparse_obs_rgb_horizon} # int
+          down_sample_steps: ${task.sparse_obs_rgb_down_sample_steps} # int
+        robot0_eef_pos:
+          horizon: ${task.sparse_obs_low_dim_horizon} # int
+          down_sample_steps: ${task.sparse_obs_low_dim_down_sample_steps} # float
+        robot0_eef_rot_axis_angle: # exists in data
+          horizon: ${task.sparse_obs_low_dim_horizon} # int
+          down_sample_steps: ${task.sparse_obs_low_dim_down_sample_steps} # float
+        policy_robot0_eef_pos:
+          horizon: ${task.sparse_obs_base_horizon} # int
+          down_sample_steps: ${task.sparse_obs_base_down_sample_steps} # float
+        policy_robot0_eef_rot_axis_angle:
+          horizon: ${task.sparse_obs_base_horizon} # int
+          down_sample_steps: ${task.sparse_obs_base_down_sample_steps} # float
+        robot0_eef_wrench:
+          horizon: ${task.sparse_obs_wrench_horizon} # int
+          down_sample_steps: ${task.sparse_obs_wrench_down_sample_steps} # float
+    action:
+      sparse:
+        horizon: ${task.sparse_action_horizon}
+        down_sample_steps: ${task.sparse_action_down_sample_steps} # int
+    training_duration_per_sparse_query: 200   # TODO (in ms)
+
+task_name: &task_name stow_residual
+dataset_path: ${oc.env:PYRITE_DATASET_FOLDERS}/correction_new
+
+env_runner: # used in workspace for computing metrics
+  _target_: diffusion_policy.env_runner.real_pusht_image_runner.RealPushTImageRunner
+
+dataset:
+  _target_: diffusion_policy.dataset.virtual_target_dataset.VirtualTargetDataset
+  shape_meta: *shape_meta
+  dataset_path: ${task.dataset_path}
+  sparse_query_frequency_down_sample_steps: 1
+  # cache_dir: null
+  action_padding: False
+  temporally_independent_normalization: False
+  seed: 42
+  val_ratio: 0.05
+  hack_linear_interpolated_dense_action: False
+  normalize_wrench: False
+  weighted_sampling: 4  # if > 1, duplicate the correction sample's ids weighted_sampling times
+  correction_horizon: 10   # the extra action horizon sampled before and after the "start of correction"

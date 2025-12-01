@@ -1,0 +1,127 @@
+name: belt_angled_150
+
+# rgb vs. low_dim: raw data are either rgb images or low_dim vectors. frames are aligned within each type.
+# obs vs. action: obs data are used as policy input; action are used as labels for policy output.
+
+# down_sample_steps: how many steps to skip in the raw data for the given usage
+# horizon: how many steps to look ahead(action) or back(obs) after downsample for the given usage
+sparse_obs_rgb_down_sample_steps: 10
+sparse_obs_rgb_horizon: 2
+
+sparse_obs_low_dim_down_sample_steps: 5
+sparse_obs_low_dim_horizon: 3
+
+sparse_action_down_sample_steps: 50
+sparse_action_horizon: 32
+
+# The following parameter is used to avoid action padding when sampling queries.
+# It is the duration of a full action prediction horizon in ms.
+# This is needed since my sampler uses timestamp instead of index to align data.
+action_horizon_duration_buffer_ms: 3300
+
+shape_meta: &shape_meta
+  # acceptable types: rgb, low_dim
+  # fields under raw and obs must be consistent with FlipUpDataset.raw_to_obs_action()
+  id_list: [0]
+  raw: # describes what exists in data
+    rgb_0:
+      shape: [3, 224, 224]
+      type: rgb
+    ts_pose_fb_0:
+      shape: [7]
+      type: low_dim
+    ts_pose_command_0:
+      shape: [7]
+      type: low_dim
+    ts_pose_virtual_target_0:
+      shape: [7]
+      type: low_dim
+    stiffness_0:
+      shape: [1]
+      type: low_dim
+    wrench_0:
+      shape: [6]
+      type: low_dim
+    rgb_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    robot_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    wrench_time_stamps_0:
+      shape: [1]
+      type: timestamp
+
+  obs: # describes observations loaded to memory 
+    rgb_0:
+      shape: [3, 224, 224]
+      type: rgb
+    robot0_eef_pos:
+      shape: [3]
+      type: low_dim
+    robot0_eef_rot_axis_angle:
+      shape: [6]
+      type: low_dim
+      rotation_rep: rotation_6d
+    # robot0_abs_eef_rot_axis_angle:
+    #   shape: [6]
+    #   type: low_dim
+    #   rotation_rep: rotation_6d
+    rgb_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    robot_time_stamps_0:
+      shape: [1]
+      type: timestamp
+  action: # describes actions loaded to memory, computed from robot command
+    shape: [9] # 9 for reference pose, 9 for virtual target, 1 for stiffness
+    rotation_rep: rotation_6d
+  sample: # describes samples used in a batch
+          # keys here must exist in obs/action above.
+          # shape, type and rotation_rep are inherited from obs/action above.
+    obs:
+      sparse:
+        rgb_0:
+          horizon: ${task.sparse_obs_rgb_horizon} # int
+          down_sample_steps: ${task.sparse_obs_rgb_down_sample_steps} # int
+        robot0_eef_pos:
+          horizon: ${task.sparse_obs_low_dim_horizon} # int
+          down_sample_steps: ${task.sparse_obs_low_dim_down_sample_steps} # float
+        robot0_eef_rot_axis_angle: # exists in data
+          horizon: ${task.sparse_obs_low_dim_horizon} # int
+          down_sample_steps: ${task.sparse_obs_low_dim_down_sample_steps} # float
+        # robot0_abs_eef_rot_axis_angle: # exists in data
+        #   horizon: ${task.sparse_obs_low_dim_horizon} # int
+        #   down_sample_steps: ${task.sparse_obs_low_dim_down_sample_steps} # float
+    action:
+      sparse:
+        horizon: ${task.sparse_action_horizon}
+        down_sample_steps: ${task.sparse_action_down_sample_steps} # int
+    training_duration_per_sparse_query: ${task.action_horizon_duration_buffer_ms}
+    
+
+task_name: &task_name
+# dataset_path: ${oc.env:PYRITE_DATASET_FOLDERS}/stow_new_blade_dagger1 # offline dagger data
+# dataset_path: ${oc.env:PYRITE_DATASET_FOLDERS}/online_stow_nb_v5_50/processed_no_correction # online correction 1st batch data
+# dataset_path: ${oc.env:PYRITE_DATASET_FOLDERS}/finetune_online_batch10/processed
+# dataset_path: ${oc.env:PYRITE_DATASET_FOLDERS}/belt_assembly
+# dataset_path: ${oc.env:PYRITE_DATASET_FOLDERS}/belt_assembly_offline_50_total_190
+dataset_path: ${oc.env:PYRITE_DATASET_FOLDERS}/belt_angled_150
+
+env_runner: # used in workspace for computing metrics
+  _target_: diffusion_policy.env_runner.real_pusht_image_runner.RealPushTImageRunner
+
+dataset:
+  _target_: diffusion_policy.dataset.virtual_target_dataset.VirtualTargetDataset
+  shape_meta: *shape_meta
+  dataset_path: ${task.dataset_path}
+  sparse_query_frequency_down_sample_steps: 8
+  hack_linear_interpolated_dense_action: False
+  # cache_dir: null
+  action_padding: True
+  temporally_independent_normalization: False
+  seed: 42
+  val_ratio: 0.05
+  normalize_wrench: False
+  # weighted_sampling: 1  # if > 1, duplicate the correction sample's ids weighted_sampling times
+  # correction_horizon: 10   # the extra action horizon sampled before and after the "start of correction"

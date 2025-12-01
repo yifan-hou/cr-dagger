@@ -1,0 +1,152 @@
+name: belt_residual_no_base_action
+
+# rgb vs. low_dim: raw data are either rgb images or low_dim vectors. frames are aligned within each type.
+# obs vs. action: obs data are used as policy input; action are used as labels for policy output.
+# dense vs. sparse: used for dense prediction vs. sparse prediction
+
+# down_sample_steps: how many steps to skip in the raw data for the given usage
+# horizon: how many steps to look ahead(action) or back(obs) after downsample for the given usage
+sparse_obs_rgb_down_sample_steps: 1
+sparse_obs_rgb_horizon: 1
+
+sparse_obs_low_dim_down_sample_steps: 5
+sparse_obs_low_dim_horizon: 3
+
+sparse_obs_base_down_sample_steps: 50
+sparse_obs_base_horizon: 6
+
+sparse_obs_wrench_down_sample_steps: 4
+sparse_obs_wrench_horizon: 32
+
+sparse_action_down_sample_steps: 10
+sparse_action_horizon: 5
+
+
+shape_meta: &shape_meta
+  # acceptable types: rgb, low_dim
+  # fields under raw and obs must be consistent with FlipUpDataset.raw_to_obs_action()
+  id_list: [0]
+  raw: # describes what exists in data
+    rgb_0:
+      shape: [3, 224, 224]
+      type: rgb
+    ts_pose_fb_0:
+      shape: [7]
+      type: low_dim
+    ts_pose_command_0:
+      shape: [7]
+      type: low_dim
+    policy_pose_command_0: # keeping this to indicate training of residual policy
+      shape: [7]
+      type: low_dim
+    ts_pose_virtual_target_0:
+      shape: [7]
+      type: low_dim
+    stiffness_0:
+      shape: [1]
+      type: low_dim
+    robot_wrench_0:
+      shape: [6]
+      type: low_dim
+    wrench_0:
+      shape: [6]
+      type: low_dim
+    key_event_0:
+      shape: [1]
+      type: low_dim
+    rgb_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    robot_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    wrench_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    policy_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    key_event_time_stamps_0:
+      shape: [1]
+      type: timestamp
+
+  obs: # describes observations loaded to memory 
+    rgb_0:
+      shape: [3, 224, 224]
+      type: rgb
+    robot0_eef_pos:
+      shape: [3]
+      type: low_dim
+    robot0_eef_rot_axis_angle:
+      shape: [6]
+      type: low_dim
+      rotation_rep: rotation_6d
+    robot0_eef_wrench:
+      shape: [6]
+      type: low_dim
+    rgb_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    robot_time_stamps_0:
+      shape: [1]
+      type: timestamp
+    wrench_time_stamps_0:
+      shape: [1]
+      type: timestamp
+  action: # describes actions loaded to memory, computed from robot command
+    shape: [15] # 9 for residual reference pose, 6 for tool wrench
+    rotation_rep: rotation_6d
+  sample: # describes samples used in a batch
+          # keys here must exist in obs/action above.
+          # shape, type and rotation_rep are inherited from obs/action above.
+    obs:
+      sparse:
+        rgb_0:
+          horizon: ${task.sparse_obs_rgb_horizon} # int
+          down_sample_steps: ${task.sparse_obs_rgb_down_sample_steps} # int
+        robot0_eef_pos:
+          horizon: ${task.sparse_obs_low_dim_horizon} # int
+          down_sample_steps: ${task.sparse_obs_low_dim_down_sample_steps} # float
+        robot0_eef_rot_axis_angle: # exists in data
+          horizon: ${task.sparse_obs_low_dim_horizon} # int
+          down_sample_steps: ${task.sparse_obs_low_dim_down_sample_steps} # float
+        robot0_eef_wrench:
+          horizon: ${task.sparse_obs_wrench_horizon} # int
+          down_sample_steps: ${task.sparse_obs_wrench_down_sample_steps} # float
+    action:
+      sparse:
+        horizon: ${task.sparse_action_horizon}
+        down_sample_steps: ${task.sparse_action_down_sample_steps} # int
+    training_duration_per_sparse_query: 200   # TODO (in ms)
+
+task_name: &task_name belt_residual
+
+dataset:
+  _target_: diffusion_policy.dataset.dynamic_dataset.DynamicDataset
+  shape_meta: *shape_meta
+  sparse_query_frequency_down_sample_steps: 8
+  action_padding: False
+  temporally_independent_normalization: False
+  seed: 42
+  val_ratio: 0.05
+  normalize_wrench: False
+  weighted_sampling: 4  # if > 1, duplicate the correction sample's ids weighted_sampling times
+  correction_horizon: 20   # the extra action horizon sampled before and after the "start of correction"
+  new_episode_prob: 0.5
+  correction_force_threshold: 3.0
+  correction_torque_threshold: 1.0
+  use_raw_policy_timestamps: False
+  virtual_target_config:
+    stiffness_estimation_para:
+      k_max: 5000  # 1cm 50N
+      k_min: 200  # 1cm 2.5N
+      f_low: 0.5
+      f_high: 5
+      dim: 3
+      characteristic_length: 0.02
+    wrench_moving_average_window_size: 500  # should be around 1s of data,
+    flag_real: True # False for simulation data
+    num_of_process: 5 # 5
+    flag_plot: False
+    fin_every_n: 50 # 50
+    id_list: ${shape_meta.id_list}

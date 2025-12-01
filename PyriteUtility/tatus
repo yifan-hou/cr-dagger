@@ -1,0 +1,634 @@
+[33mcommit d411da13f8a81f6059977a34ec228e95f275e783[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: xxm19 <xuxm@stanford.edu>
+Date:   Tue Apr 22 18:52:34 2025 -0700
+
+    local config changes
+
+[33mcommit 3229dc46a83fac14e26137da0f797e5ff3e28663[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue Apr 29 13:25:55 2025 -0700
+
+    Added a few real data processing scripts
+
+[33mcommit f07abd4511473cd296d8296ff5803df8de530a99[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Thu Apr 24 16:49:15 2025 -0700
+
+    Saving moving average wrench in processing function
+
+[33mcommit ba6a33aff8579eb12a820ae3285ddd9708214933[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Thu Apr 24 00:37:17 2025 -0700
+
+    Added utility for computing rotation magnitude; updated plotting GUI
+
+[33mcommit 62f91ff0aa648c6339c124931866713ac88e6713[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue Apr 22 17:25:45 2025 -0700
+
+    config update 4.22
+
+[33mcommit 1e69af811736d725e1b3ea8bff1408870da82e71[m
+Author: Hojung Choi <ilovehjb0520@gmail.com>
+Date:   Thu Apr 17 16:26:34 2025 -0400
+
+    updated values for k_{} and f_{} in umift data processing
+
+[33mcommit 12f6e7bf0eaf7ecf02aa8f4ed9ba346e5a027aa3[m
+Author: Hojung Choi <ilovehjb0520@gmail.com>
+Date:   Tue Apr 1 12:17:50 2025 -0400
+
+    local changes, masks
+
+[33mcommit f43f87fe365dff57787cb463a01e83cb44401b29[m
+Author: xxm19 <xuxm@stanford.edu>
+Date:   Sun Apr 13 20:22:52 2025 -0700
+
+    data processing with key event
+
+[33mcommit 3989dc3045594753ef85d15ea3d80ef3f3f4e21f[m
+Author: xxm19 <xuxm@stanford.edu>
+Date:   Sun Apr 13 13:11:14 2025 -0700
+
+    config changes
+
+[33mcommit ccd769f90f0dec68b66883eab47a06bbafba4eee[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sat Apr 5 23:26:18 2025 -0700
+
+    Updates 3d plot: added legend properly
+
+[33mcommit 6b680bb71d7b9e12fd499923805e220a943d6f61[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Mon Mar 31 22:06:11 2025 -0700
+
+    Updating 3d plotting to include force
+
+[33mcommit 1bb22b2ee0d0f74cb09061e56adba70e46c25316[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Mon Mar 31 20:28:21 2025 -0700
+
+    Use parallelized processing for umift
+
+[33mcommit 88d8cbb109ef5356864e6f7e891314ee1ee5e490[m
+Author: xxm19 <xuxm@stanford.edu>
+Date:   Mon Mar 31 14:04:10 2025 -0700
+
+    Updated processing scripts to pass through robot wrench
+    
+    Test: tested on mock data
+
+[33mcommit 966a85d8e864b0bd9736b187a57881c260fa3f6c[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Mon Mar 31 10:47:48 2025 -0700
+
+    3d plot: shows rgb id. Added a script to update meta
+    
+    Test: both tested
+
+[33mcommit efec69c9e03586631f4c93a96ec58021badccecc[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sun Mar 30 17:22:54 2025 -0700
+
+    Fix orientation bug
+
+[33mcommit 155713804127770c835e2ff7e7cf6b3e3813cffd[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sat Mar 29 09:49:48 2025 -0700
+
+    Fixed wrong legend of traj plotting
+    
+    Test: tested via test script
+
+[33mcommit dbcb851503eb0126423d56855ae4078628c48f51[m
+Author: xxm19 <xuxm@stanford.edu>
+Date:   Thu Mar 13 14:14:11 2025 -0700
+
+    correction flag=True
+
+[33mcommit a745c9f2c33b054279fa7e669cb1ad0e99db6be1[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Thu Mar 27 15:04:37 2025 -0700
+
+    Added scripts for interactive 3D plots of traj and rgb
+
+[33mcommit 303025f08bdff85ee9c985c656276698bdf23720[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue Mar 25 14:57:49 2025 -0700
+
+    Made rgb and wrench optional in data processing
+    
+    Test: tested on robot only data
+
+[33mcommit e85e6c5342f0b0072c9ea884470850690db28e5c[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Thu Mar 20 23:34:02 2025 -0700
+
+    Multiple changes to support online learning and umift debugging
+    
+    * postprocessing script and real_data_processing: move functions out to
+      a separate file processing_functions.py. Wrap function calls with
+    config structure
+    * postprocessing: vectorized vt target computation to greatly save time
+    * compliance helpers: cleaned up penetration estimation. Added a
+      batch_update function to Support
+      vectorized version
+    * computer_vision_utility: add a function to apply masking
+    * episode_data_buffer, indexing.py: clean ups
+    
+    Test: tested on robot
+
+[33mcommit 139a28dff08b823c7769c9ba8444644382d572e9[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Wed Mar 12 13:11:29 2025 -0700
+
+    Small change: comment out unused timing code
+
+[33mcommit b4394e75721014d0c1717cad2178e2cc32914720[m
+Author: Hojung Choi <ilovehjb0520@gmail.com>
+Date:   Tue Mar 11 20:16:33 2025 +0000
+
+    adding masking and BGR2RGB conversion on data post processing
+
+[33mcommit 77ad2540843795c443a71c10d65c72bf909a104a[m
+Author: Hojung Choi <ilovehjb0520@gmail.com>
+Date:   Sun Mar 9 21:09:57 2025 +0000
+
+    Config changes for postprocessing umift
+
+[33mcommit 0090fc68cb4fdfef479e2886656b6fd80023b35f[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sat Mar 8 14:16:29 2025 -0800
+
+    (Hojung) Added a postprocessing script for UMIFT
+
+[33mcommit fcef28cec7de41a458add40668b82b441138290d[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sat Mar 8 14:14:03 2025 -0800
+
+    Added try-catch to find damaged file easily
+    
+    * Also updated configs in postprocessing code
+    
+    Test: tested in postprocessing
+
+[33mcommit e4ea91fde101973910024c84d0e60b9c0102032a[m[33m ([m[1;31morigin/xm_dev[m[33m, [m[1;32mxm_dev[m[33m)[m
+Author: xxm19 <xuxm@stanford.edu>
+Date:   Mon Feb 17 23:39:00 2025 -0800
+
+    Supports correction policy
+    
+    * databuffer: optionally add fields for policy fields
+    * Added plot_correction_data.py
+    * real_data_processing: added optional features to handle policy fields
+    
+    Test: tested in training
+
+[33mcommit 19c78bd42668022a34f270951e72087394a85b5a[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Fri Feb 7 21:35:17 2025 -0800
+
+    Updates for stow task training
+
+[33mcommit 3051fdcfe653e3a6bc366bc4ec8133839485e97b[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Fri Feb 7 21:34:57 2025 -0800
+
+    Added a simplified MPC class for UMIFT
+
+[33mcommit 717857f8bbf6ea751554e52ebaf56a261523784f[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Mon Jan 13 23:19:24 2025 -0800
+
+    Restructure to make this package pip installable
+    
+    * Move all libraries under a PyriteUtility/ subfolder
+    * Added __init__.py, setup.py
+    * Updated gitignore
+
+[33mcommit a9e8e071ae9c7d50e64e0ffb920e3aa4437ceaee[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Thu Dec 5 22:51:37 2024 -0800
+
+    Add processing of mask to real_data_processing
+
+[33mcommit 3f0f6b38ce94bef748bcbfcb3b0fcc9e4de1ba09[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Mon Dec 2 21:30:20 2024 -0800
+
+    Update postprocessing script for umift data
+
+[33mcommit 7c21a8a2c9773a8fa27c9dba7a9d143fc509449e[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sun Dec 1 18:11:39 2024 -0800
+
+    spatial_utilities.py
+    * Added quaternion normalization in pose7_to_SE3
+    * Fixed a bug in so3_to_SO3 when dealing with high dim arrays
+    * SO3_to_quat: specify wxyz ordering in scipy instead of doing
+      conversion afterwards
+    * spt_to_SE3: add arguments for tolerance
+    
+    Test: tested
+
+[33mcommit 6907439bd229e415c199180a6d834ad1d535c440[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Wed Nov 27 14:44:51 2024 -0800
+
+    Added a script to generate virtual target label.
+    
+    * Moved this script from PyriteEnvSuites. Customized for umi-ft.
+
+[33mcommit a39e64b3b9b5ac842b0910ba4ccf1b3d2acd3424[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Wed Nov 27 14:44:44 2024 -0800
+
+    Added precision tol to SE3_to_spd
+
+[33mcommit d23f8594308afa02c1194a52af720e4bfb59b92c[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sat Nov 16 11:30:33 2024 -0800
+
+    Updated indexing for dense sampling; some formating cleanups
+
+[33mcommit 506ddc5661cfe98da1fd43762b95a9efb701c3fe[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Fri Oct 25 21:00:18 2024 -0700
+
+    Fixed local path
+
+[33mcommit 0e08e4c1771aac48bc1f5bc87ba692f84f703309[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sun Oct 20 15:14:33 2024 -0700
+
+    Removed some used MPC classes
+
+[33mcommit 115b8fc0db69dba1ad1b7320d44a5079864834e3[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sun Oct 20 15:02:48 2024 -0700
+
+    Update path
+
+[33mcommit 75da43bfdeb000dde7c59434581b71a09a2e7301[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Fri Sep 20 16:16:23 2024 -0700
+
+    Update data postprocessing scripts for flipup
+
+[33mcommit af411513a99b603e38de68f43d7d09dea37b6990[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Mon Sep 9 21:10:46 2024 -0700
+
+    Debugging LinearInterpolator
+
+[33mcommit 096975f29af9985d5c95537c3ae0fea392dc931c[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Fri Sep 6 16:11:10 2024 -0700
+
+    data post processing change
+
+[33mcommit a9c9b61e956b75c2f9a7ccfe807ab9d9a232c371[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Fri Sep 6 16:09:50 2024 -0700
+
+    Added Camera streaming support
+    
+    Test: tested on two GoPros
+
+[33mcommit 73a0f93fb3e134dcf7de4c3395348da30912339e[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Thu Aug 29 23:29:45 2024 -0700
+
+    Improve data postprocessing
+    
+    * Added script to check black images
+    * Made real_data_processing multi-processing
+    
+    Test: tested
+
+[33mcommit 7c269eb2e1035a6c4ff30f6ebacbd76edbecf0bb[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Thu Aug 29 15:11:59 2024 -0700
+
+    Bimanual support in data_buffer, postprocessing and MPC
+    
+    Test: tested in experiments
+
+[33mcommit 36a955e81696c16f3eb2dacae5268f5b072f6c6d[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sun Aug 18 18:19:06 2024 -0700
+
+    Compliance helpers: added 6D virtual target computation and velocity
+    filtering
+    
+    * Renamed PenetrationEstimator to VirtualTargetEstimator
+    * Added option for 6D virtual target computation
+    * Added characteristic length to support one stiffness for both rotation
+      and translation
+    * Added/updated spatial math functions
+    
+    Test: tested on real data
+
+[33mcommit 38f3e5d7798b08b4e8276f713425a0cc356f655e[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sun Aug 18 18:18:54 2024 -0700
+
+    Added a file for plotting helpers
+
+[33mcommit 912b94f16eb4538577231e2b1a8ff4cb9182c2b6[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sun Aug 11 21:16:02 2024 -0700
+
+    Several changes to spatial math and MPC
+    
+    * Corrected SE3_to_twc to SE3_to_spt
+    * Corrected sign of wrenches in  penetration estimation
+    * Added fix_orientation as an argument to MPC class
+    * Spatial math: added SE3_to_se3 for twist conversion
+    
+    Test: tested in experiments
+
+[33mcommit ca558f7a21f679fccfd12af1e20282e170187514[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue Jul 30 18:13:16 2024 -0700
+
+    Added legacy MPC for simulation
+
+[33mcommit de9b756c00367e0bb964d4c15a51eea697caa821[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue Jul 30 14:26:59 2024 -0700
+
+    Rewrite MPCHybrid class to support the new hardware server
+    
+    * Removed data queue
+    * Simplified interfaces
+    * Lots of junks left, need a clean up later
+    
+    Test: tested in experiments
+
+[33mcommit 048df781012b2eeb858d59cb8b0ee785bd4fbf7b[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue Jul 30 14:26:54 2024 -0700
+
+    Small updates to real_data_processing script
+
+[33mcommit f6a6a6303a49cc7de9188c3495ed6c96ad38bffa[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Wed Jul 24 23:24:01 2024 -0700
+
+    Lots of updates to MPC class
+    
+    * No longer store data queue as a part of MPC. Moving towards using
+      SharedMemoryRingBuffer in FlipUpReal env class
+    * Lots of interface changes
+    * Formatting a little
+
+[33mcommit c285759ee48cbf9a20fb52254abaa5c10528430e[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Wed Jul 24 23:21:51 2024 -0700
+
+    Added first draft of VideoStream class
+    
+    * Modified from uvc_camera.py https://github.com/real-stanford/universal_manipulation_interface/blob/main/umi/real_world/uvc_camera.py
+    * Not fully tested yet
+
+[33mcommit 60a67996da5ffb153a2ad948ba49cb887228a7f9[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Wed Jul 24 23:20:20 2024 -0700
+
+    Updated EpisodeDataBuffer for real hardware; formating it using black
+
+[33mcommit b504abd7cb199faa0a96470d6acc381ca1f7dd45[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Wed Jul 24 23:18:45 2024 -0700
+
+    Added shared memory helpers from UMI repo.
+    
+    * Updated path
+    * Updated some comments
+
+[33mcommit 921dd04a6cef9df7258d2b00a63ec4bcadc30095[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Thu Jul 18 21:07:05 2024 -0700
+
+    Experimental: added utils for pytorch model serialization
+    
+    Following https://pytorch.org/tutorials/advanced/cpp_export.html
+    
+    Test: Official example failed with CUDA 12.2
+
+[33mcommit 1361bd166aa8df5a802122e0a3076330c8a86546[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue Jul 16 00:34:06 2024 -0700
+
+    Updates for real data; formating
+
+[33mcommit 8655af88538cf6b8f14a7489a8885826ed685b1a[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue Jul 16 00:33:20 2024 -0700
+
+    Added script to convert real data to shape meta format
+
+[33mcommit e02dc90aff066182f137281d9280ced1f7e21c95[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Wed Jul 10 20:04:10 2024 -0700
+
+    Supports for 19D action
+    
+    * Added MPC interfaces to output 19D action
+    * Updated interpolators to do SE3 interpolation
+    * Added a spatial utility function
+    
+    Test: tested in sim
+
+[33mcommit 4a4d48cb39c07fe325cf46ddc0e0956dc959eca5[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sun Jun 23 22:23:04 2024 -0700
+
+    Tested force control
+    
+    * Varies bug fixes in admittance controller
+    * Added extensive printing support
+    
+    Test: tested in simulation
+
+[33mcommit 25f572b4fa4f3f1813ba6b9a01828641bb1f428c[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue Jun 11 19:48:14 2024 -0700
+
+    Added admittance controller
+    
+    * Implemented admittance controller in force_control.py
+    * Implemented additional spatial math functions
+    * Fixed interfaces to np array in ts trajectory
+    
+    Test: 1d force control is stable
+
+[33mcommit 0987dee4799d814a6224719f9df1f4ee60d6fb65[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Mon Jun 10 20:17:55 2024 -0700
+
+    Clean up order of spatial math functions; apply formatter
+
+[33mcommit e4a9a2e254e00c1492b19426eaf8ac1ba5bd6c1f[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Mon Jun 10 20:03:03 2024 -0700
+
+    Unify spatial math variable names
+
+[33mcommit 6d0fda958d7093a53537b75d2c4b3882bcefe09e[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Mon Jun 10 13:35:03 2024 -0700
+
+    Added traj gen/spatial functions to support force control
+
+[33mcommit e0d0aee62ce13f2821643988cb0c623638898cbf[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sat Jun 8 22:20:15 2024 -0700
+
+    Updates in plotting, episode_data_buffer, compliance helper, mpc,
+    spatial math
+    
+    * Plotting script updated to support sparse only data
+    * Added plotting in episode_data_buffer
+    * Added elements in episode_data_buffer: js_fb, wrench_filtered
+    * Deleted unused __len__ and __getitem__ functions in
+      episode_data_buffer
+    * Updated compliance observer, added plotting
+    * Added penetration estimator
+    * Updated MPC to support mod2
+    * added some spatial math functions
+
+[33mcommit c3e516f8f743eb29acebfa45d4042f2b41b195c0[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sat Jun 8 22:18:41 2024 -0700
+
+    Added signal filtering classes
+    
+    * Added butterworth filter, lpf interface
+    * Added test and plotting
+    
+    Test: plotting looks good
+
+[33mcommit a0ba56ce8e43fd5836bec26ffc82b4621afb496e[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Fri May 31 13:57:44 2024 -0700
+
+    temp. Adding:
+    
+    finite difference function
+    modifying stiffness observer
+    update data buffer to include ft sensor pose
+
+[33mcommit 74aa7882837ae3d3bdb3f5fbf952071cb5fc0398[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Thu May 30 19:37:56 2024 -0700
+
+    Fix bugs in hybrid MPC
+    
+    Problem:
+    * Hybrid MPC logic is confusing.
+    * Bug in dense reference outputs: obs_last_current is a copy of a dict,
+      which still gets updates together with the original
+    
+    Solution:
+    * Rewrite hybrid MPC to only work with integer timesteps, get rid of s -
+      timestep conversion
+    * Use deep copy for obs_last_current
+    * Added plotting functions for JS/TS action
+    
+    Test: dense action works in simulation.
+
+[33mcommit dd7ddd31848343a8e9b4620fb8e992b5c5d20361[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue May 28 14:12:33 2024 -0700
+
+    Add package for plotting tools
+
+[33mcommit fc5fd94d8737450ff9ff35dc243e3064f10f8490[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue May 28 14:12:02 2024 -0700
+
+    Add package for indexing tools
+
+[33mcommit de24709b136cccb18cb61a13bf45875edee3b07c[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue May 28 14:11:01 2024 -0700
+
+    Adding debugging info for mpc and trajectory
+
+[33mcommit f8fbfabcedcf0eb2b3bd1c189fd1133d11909b9c[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Fri May 24 13:59:41 2024 -0700
+
+    Varies updates on trajectory, mpc and compliance_helper
+    
+    trajectory: added linear interpolation for transforms.
+    MPC: added dense offsets.
+    compliance: added stiffness observers.
+
+[33mcommit 8665ccc51daa1611eafd995a9eaf27b93bdb2d10[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Wed May 22 16:00:58 2024 -0700
+
+    Update printing control in mpc
+
+[33mcommit 43b82fb6402c5f787fabb3c20341557c14e62ee2[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue May 21 11:06:00 2024 -0700
+
+    Add hybrid MPC class; fix normalize()
+    
+    * Added a new class for hybrid MPC.
+    * Fixed a bug in normalize() that sometimes cause a wrong output
+      dimension
+    
+    Test: tested in simulation
+
+[33mcommit 5194869c3e765dc584cd3d5f1fc23ad5ba2a9fe0[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Wed May 15 09:19:27 2024 -0700
+
+    add spatial utilities: adj, transpose
+
+[33mcommit 5157aa100ecbddd53e0ba604a8c68386324875b6[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue May 7 16:31:51 2024 -0700
+
+    move some utils over from simkit
+
+[33mcommit 956030ce660ec88835a2a7e6ed2f3f8306bc64f6[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue May 7 16:31:26 2024 -0700
+
+    added stiffness estimator class
+
+[33mcommit a71a6aacf5fe51bccddd849eacf8a66a1e67b971[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sun May 5 20:34:14 2024 -0700
+
+    Add function for stiffness estimation
+    
+    * Takes in arrays of wrench and displacement data
+    * Formulates a convex optimization problem with regularization that
+      ensures the stiffness matrix is positive semi definite
+    * Solve with CVXPY
+
+[33mcommit 18e40f0feb462fe5211ed29aea6d5ebf37910e16[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Tue Apr 30 08:17:58 2024 -0700
+
+    Adding utilities for simulation to work
+    
+    * Added computer_vision_utility.py for get_image_transform
+    * Added mpc.py and trajectory.py for planning and control, which does
+      MPC and several interpolation routines
+    * add spatial_math, including a range of pose conversions.
+    
+    Test: tested in policy execution in sim.
+
+[33mcommit 2b04f9b0a52f568bdfff85774583d8a74b497be7[m
+Author: Yifan Hou <yifanhou@stanford.edu>
+Date:   Sun Apr 28 10:25:39 2024 -0700
+
+    initial commit

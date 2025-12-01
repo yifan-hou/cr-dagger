@@ -1,0 +1,182 @@
+defaults:
+  - _self_
+  - task: stow_no_force.yaml
+
+name: finetune
+output_dir: "/shared_local/training_outputs/2025.04.22_04.27.42_stow_new_blade_stow/2025.04.30_14.11.36_batch10_finetune"
+_target_: diffusion_policy.workspace.train_diffusion_unet_image_finetune_workspace.TrainDiffusionUnetImageFinetuneWorkspace
+
+task_name: ${task.name}
+shape_meta: ${task.shape_meta}
+exp_name: "default"
+
+policy:
+  _target_: diffusion_policy.policy.diffusion_unet_timm_mod1_policy.DiffusionUnetTimmMod1Policy
+
+  shape_meta: ${shape_meta}
+  
+  noise_scheduler:
+    _target_: diffusers.DDIMScheduler
+    num_train_timesteps: 50 # 15
+    beta_start: 0.0001
+    beta_end: 0.02
+    # beta_schedule is important
+    # this is the best we found
+    beta_schedule: squaredcos_cap_v2
+    clip_sample: True
+    set_alpha_to_one: True
+    steps_offset: 0
+    prediction_type: epsilon # or sample
+
+  obs_encoder:
+    _target_: diffusion_policy.model.vision.timm_obs_encoder_with_force.TimmObsEncoderWithForce
+    shape_meta: ${shape_meta}
+    fuse_mode: modality-attention
+    reduce_pretrained_lr: True
+
+    vision_encoder_cfg:
+      model_name: 'vit_base_patch32_clip_224.openai'
+      pretrained: True
+      frozen: True
+      global_pool: ''
+
+      # 'avg' or 'max' or 'soft_attention' or 'spatial_embedding' or 'transformer' or 'attention_pool_2d'
+      feature_aggregation: 'attention_pool_2d'
+      # feature_aggregation: null
+      position_encoding: null
+
+      # it only works for resnet. 32 (7x7) or 16 (14x14)
+      downsample_ratio: 32
+
+      transforms:
+        - type: RandomCrop
+          ratio: 0.95
+        - _target_: torchvision.transforms.ColorJitter
+          brightness: 0.3
+          contrast: 0.4
+          saturation: 0.5
+          hue: 0.08
+
+      use_group_norm: True
+      share_rgb_model: False
+      imagenet_norm: True
+    
+    # force_encoder_cfg:
+    #   model_name: causalconv
+    #   feature_dim: 384
+    #   frozen: False
+    #   pretrained: False
+    #   use_group_norm: False
+    #   share_force_model: False
+    
+  num_inference_steps: 16 # 8
+  diffusion_step_embed_dim: 32
+  down_dims: [256,512,1024]
+  kernel_size: 5
+  n_groups: 8
+  cond_predict_scale: True
+  input_pertub: 0.1 # reference: https://github.com/forever208/DDPM-IP
+  # train multiple diffusion steps per obs encoder forward pass
+  # doing this too much will cause instability!
+  train_diffusion_n_samples: 1
+  hack_no_obs_encoder_for_dense: False # debug
+
+ema:
+  _target_: diffusion_policy.model.diffusion.ema_model.EMAModel
+  update_after_step: 0
+  inv_gamma: 1.0
+  power: 0.75
+  min_value: 0.0
+  max_value: 0.9999
+
+dataloader:
+  batch_size: 128 # debug 128
+  num_workers: 32 # debug 32
+  shuffle: True
+  pin_memory: True
+  persistent_workers: True # debug: True
+
+val_dataloader:
+  batch_size: 128
+  num_workers: 32 # debug 32
+  shuffle: False
+  pin_memory: True
+  persistent_workers: True # debug: True
+
+optimizer:
+  _target_: torch.optim.AdamW
+  # lr: 3.0e-4
+  lr: 3.0e-5 # use 1/10 rate for finetuning
+  betas: [0.95, 0.999]
+  eps: 1.0e-8
+  weight_decay: 1.0e-6
+
+training:
+  device: "cuda:0"
+  seed: 42
+  debug: False
+  resume: True # needed for resuming
+  # optimization
+  lr_scheduler: cosine
+  lr_warmup_steps: 500 # debug 2000
+  num_epochs: 21 # debug 80
+  gt_traj_num_epochs: 80 # debug train dense with gt traj for the first few epochs
+  dense_training_start_epochs: 60 # debug start train dense after this number of epochs
+  
+  # gradient clipping, set to negative to disable
+  dense_gradient_norm_limit: 0.2
+  sparse_gradient_norm_limit: -1
+  # normalization schedule (weight increase from 0 to 1 during the given range)
+  normalization_schedule: [0.3, 0.3]
+  normalization_weight: 0.00 # needs debugging before using it
+
+  log_gradient_norm: False
+
+  gradient_accumulate_every: 1
+  # EMA destroys performance when used with BatchNorm
+  # replace BatchNorm with GroupNorm.
+  use_ema: True
+  freeze_encoder: False
+  # training loop control
+  # in epochs
+  rollout_every: 10
+  checkpoint_every: 10
+  val_every: 5
+  sample_every: 5 # debug 5
+  # steps per epoch
+  max_train_steps: null
+  max_val_steps: null
+  # misc
+  tqdm_interval_sec: 1.0
+
+
+logging:
+  project: hierarchical-policy
+  resume: False
+  mode: online
+  name: ${now:%Y.%m.%d-%H.%M.%S}_${task_name}_${name}
+  tags: ["${name}", "${task_name}", "${exp_name}"]
+  id: null
+  group: null
+
+checkpoint:
+  topk:
+    monitor_key: train_loss
+    mode: min
+    k: 20
+    format_str: 'epoch={epoch:04d}-train_loss={train_loss:.3f}.ckpt'
+  save_last_ckpt: True
+  save_last_snapshot: False
+
+multi_run:
+  run_dir: ${output_dir}/${now:%Y.%m.%d}_${now:%H.%M.%S}_${task_name}_${name}
+  wandb_name_base: ${now:%Y.%m.%d-%H.%M.%S}_${task_name}_${name}
+
+hydra:
+  job:
+    override_dirname: ${name}
+  run:
+    dir: ${output_dir}/${now:%Y.%m.%d}_${now:%H.%M.%S}_${task_name}_${name}
+  sweep:
+    dir: ${output_dir}/${now:%Y.%m.%d}_${now:%H.%M.%S}_${task_name}_${name}
+    subdir: ${hydra.job.num}
