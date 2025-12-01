@@ -1,5 +1,5 @@
 # CR-DAgger
-Official implementation for paper "Compliant Residual DAgger: Improving Real-World Contact-Rich Manipulation with Human Corrections"
+Official implementation for paper "Compliant Residual DAgger: Improving Real-World Contact-Rich Manipulation with Human Corrections", by Xiaomeng Xu*, Yifan Hou*, Chendong Xin, Zeyi Liu, and Shuran Song.
 
 [Link to project page](https://compliant-residual-dagger.github.io/)
 
