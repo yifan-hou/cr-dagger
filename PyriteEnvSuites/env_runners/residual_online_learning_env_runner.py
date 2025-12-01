@@ -432,30 +432,6 @@ def main():
                     twist_RVt[..., 3:6] = residual_action_wrench[..., 3:6] / control_para["rotational_stiffness"]
                     SE3_RVt = su.twc_to_SE3(twist_RVt)
 
-                # # debug
-                # # convert to tip position
-                # SE3_Ttip = np.eye(4)
-                # SE3_Ttip[0:3, 3] = np.array([0.0, 0.0, 0.297])
-                # SE3_tipT = su.SE3_inv(SE3_Ttip)
-                # # Tip0_T0 * T0_T1 * T1_tip1
-                # for i in range(residual_action_horizon):
-                #     SE3_BR_tip = SE3_tipT @ SE3_BR[i] @ SE3_Ttip
-                #     # print("residual tip motion: ", SE3_BR_tip[:3, 3])
-                #     if np.linalg.norm(SE3_BR_tip[:3, 3]) > 0.05:
-                #         print("Warning: residual ref action is too large")
-                #         print("rotation_mag: ", su.rotation_magnitude(SE3_BR[i][:3, :3]))
-
-
-                #     SE3_Rvt_tip = SE3_tipT @ SE3_RVt[i] @ SE3_Ttip
-                #     # print("vt tip motion: ", SE3_Rvt_tip[:3, 3])
-                #     if np.linalg.norm(SE3_Rvt_tip[:3, 3]) > 0.05:
-                #         print("Warning: residual vt action is too large")
-                #         print("residual_action_wrench: ", residual_action_wrench[i])
-                #         print("twist_RVt: ", twist_RVt[i])
-                #         print("rotation_mag: ", su.rotation_magnitude(SE3_RVt[i][:3, :3]))
-
-
-
                 # compute abs command on top of base policy action
                 SE3_WR_all = [np.array] * len(id_list)
                 SE3_WVt_all = [np.array] * len(id_list)

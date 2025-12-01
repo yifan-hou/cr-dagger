@@ -11,58 +11,6 @@ _target_: diffusion_policy.workspace.train_online_residual_mlp_workspace.TrainOn
 task_name: ${task.name}
 shape_meta: ${task.shape_meta}
 exp_name: "default"
-
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.22_04.27.42_stow_new_blade_stow/checkpoints/latest.ckpt"
-# finetune 50
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.26_16.52.38_stow_new_blade_dagger1_finetune_50/checkpoints/latest.ckpt"
-# finetune 50 no encoder
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.27_00.55.22_stow_new_blade_dagger1_finetune_50_no_encoder/checkpoints/latest.ckpt"
-# finetune 50 correction data, no encoder
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.27_11.24.31_stow_new_blade_correction_finetune_50_no_encoder/checkpoints/latest.ckpt"
-# dagger with correction
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.27_20.54.03_stow_new_blade_stow/checkpoints/latest.ckpt"
-# retrain from scratch, dagger data
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.28_02.15.15_stow_new_blade_stow/checkpoints/latest.ckpt"
-# Dagger with take over data
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.29_03.26.00_stow_new_blade_stow/checkpoints/latest.ckpt"
-# finetune with take over data
-# retrain from scratch, 50 offline data
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.30_01.14.38_stow_new_blade_correction_stow/checkpoints/latest.ckpt"
-
-# finetune with correction, more sampling
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.29_22.05.27_stow_new_blade_correction_finetune_50_no_encoder_more_sampling/checkpoints/latest.ckpt"
-# finetune with correction, no sampling (new)
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.29_22.12.10_stow_new_blade_correction_finetune_50_no_encoder_no_sampling/checkpoints/latest.ckpt"
-# finetune 50new no encoder
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.30_01.06.58_stow_new_blade_correction_finetune_offline_50_no_encoder/checkpoints/latest.ckpt"
-# finetune with correction, sample more both before and after correction
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.30_03.00.29_stow_new_blade_correction_finetune_correction_50_no_encoder_denser_sample_before_and_after/checkpoints/latest.ckpt"
-
-# dagger finetune batch5
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.22_04.27.42_stow_new_blade_stow/2025.04.29_17.37.27_batch5_finetune/checkpoints/latest.ckpt"
-# dagger finetune batch10
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.22_04.27.42_stow_new_blade_stow/2025.04.30_14.48.07_batch10_finetune/checkpoints/latest.ckpt"
-
-### ------------------------------- Belt assembly ------------------------------- ###
-# belt assembly base policy ckpt
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.05.02_00.02.43_stow_belt_assembly_stow/checkpoints/latest.ckpt"
-# finetune with correction
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.05.05_22.15.51_belt_assembly_finetune_finetune/checkpoints/latest.ckpt"
-# retrain from scratch with base + correction only data
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.05.05_22.38.49_belt_assembly_finetune_stow/checkpoints/latest.ckpt"
-
-# retrain from scratch with base + correction only data
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.05.05_22.38.49_belt_assembly_finetune_stow/checkpoints/latest.ckpt"
-# retrain w takeover 50
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.05.06_08.05.53_belt_assembly_retrain_takeover_stow/checkpoints/latest.ckpt"
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.05.06_06.47.52_belt_assembly_finetune_takeover_finetune/checkpoints/latest.ckpt"
-
-# retrain w offline 50
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.05.06_19.03.06_belt_assembly_retrain_offline_stow/checkpoints/latest.ckpt"
-# finetune w offline 50
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.05.06_20.42.52_belt_assembly_finetune_offline_finetune/checkpoints/latest.ckpt"
-
-### ------------------------------- Belt angled -------------------------------- ###
 base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.06.17_07.26.20_belt_angled_150_dp/checkpoints/latest.ckpt"
 
 obs_encoder:    

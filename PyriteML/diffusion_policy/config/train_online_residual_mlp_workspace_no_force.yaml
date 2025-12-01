@@ -13,8 +13,6 @@ task_name: ${task.name}
 shape_meta: ${task.shape_meta}
 exp_name: "default"
 
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.17_16.24.08_stow_new_blade_stow/checkpoints/latest.ckpt"
-# base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.12_00.23.45_stow_new_blade_stow/checkpoints/latest.ckpt"
 base_policy_ckpt: "${oc.env:PYRITE_CHECKPOINT_FOLDERS}/2025.04.22_04.27.42_stow_new_blade_stow/checkpoints/latest.ckpt"
 
 

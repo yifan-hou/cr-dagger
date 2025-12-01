@@ -1,7 +1,6 @@
 defaults:
   - _self_
   - task: stow_no_force.yaml
-  # - task: umift_single_arm_two_coinft_dp.yaml
 
 name: dp
 output_dir: ${oc.env:PYRITE_CHECKPOINT_FOLDERS}

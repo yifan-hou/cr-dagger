@@ -45,43 +45,16 @@ export PYRITE_HARDWARE_CONFIG_FOLDERS=$HOME/hardware_interfaces/workcell/ur_test
 export PYRITE_CONTROL_LOG_FOLDERS=$HOME/data/control_log
 ```
 
-## Process data
-For umi-ft data: the postprocessing script is `PyriteUtility/data_pipeline/postprocessing_add_virtual_target_label.py`.
+## Train a diffusion policy
+Train a diffusion policy as the base policy.
 
-### Generate labels
-To do postprocessing (generates virtual targets/stiffness labels): edit the following in the script before running it:
-``` py
-# Config for umift (single robot)
-dataset_path = dataset_folder_path + "/umift/acp_replay_buffer_gripper.zarr/"
-id_list = [0] # for bimanual, it should be [0, 1]
-
-num_of_process = 5 # parallelization uses a lot of memory, don't make this number too big
-flag_plot = False
-```
-The other parameters can stay the same.
-After this is done, the dataset should be ready for training.
-
-> Note: The script also offset the timestamps in the data by finding the smallest time among all timestamps, then subtract it from all timestamps.
-
-
-
-### Visualize data
-To plot the reference trajectory and generated virtual target trajectory, set the following:
-
-``` sh
-num_of_process = 1
-flag_plot = True
-fin_every_n = 5  # plot a line from ref to vt point every xx points. 5 is good for umift.
-```
-
-## Train
-1. Set path to your zarr data in your task config under PyriteML/diffusion_policy/config/task/umift_single_arm.yaml
-2. Make sure the above task yaml is being selected in the workspace config at PyriteML/diffusion_policy/config/train_conv_workspace.yaml
+1. Set path to your zarr data in your task config under PyriteML/diffusion_policy/config/task/stow_no_force.yaml
+2. Make sure the above task yaml is being selected in the workspace config at PyriteML/diffusion_policy/config/train_dp_workspace.yaml
 3. Launch training with:
 ``` sh
 clear;
 cd PyriteML;
-HYDRA_FULL_ERROR=1 accelerate launch train.py --config-name=train_conv_workspace
+HYDRA_FULL_ERROR=1 accelerate launch train.py --config-name=train_dp_workspace
 ```
 Example of multi-gpu training:
 ``` sh
