@@ -196,6 +196,8 @@ If you found this repo useful, you can acknowledge us by citing our paper:
 This repository is released under the MIT license. 
 
 ## Acknowledgement
+This work was supported in part by the  NSF Award #2143601, #2037101, and #2132519, Sloan Fellowship, Toyota Research Institute, and Samsung. We would like to thank Google and TRI for the UR5 robot hardware. The views and conclusions contained herein are those of the authors and should not be interpreted as necessarily representing the official policies, either expressed or implied, of the sponsors.
+
 Special thanks to [@yihuai-gao](https://github.com/yihuai-gao) for lots of customization of the [robot-message-queue](https://github.com/yihuai-gao/robot-message-queue) package for this project.
 
 ## Code References
