@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     # Add the yaml to the config args parse
     with open(args.config) as f:
-        configs = yaml.load(f)
+        configs = yaml.load(f, Loader=yaml.SafeLoader)
 
     # Merge configs and args
     for arg in vars(args):
